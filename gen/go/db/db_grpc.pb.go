@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type DatabaseClient interface {
 	GetRecordByID(ctx context.Context, in *GetByIdRequest, opts ...grpc.CallOption) (*RecordResponse, error)
-	GetAllRecords(ctx context.Context, in *GetAllRecordsRequest, opts ...grpc.CallOption) (*RecordResponse, error)
+	GetAllRecords(ctx context.Context, in *GetAllRecordsRequest, opts ...grpc.CallOption) (*RecordsResponse, error)
 }
 
 type databaseClient struct {
@@ -49,9 +49,9 @@ func (c *databaseClient) GetRecordByID(ctx context.Context, in *GetByIdRequest, 
 	return out, nil
 }
 
-func (c *databaseClient) GetAllRecords(ctx context.Context, in *GetAllRecordsRequest, opts ...grpc.CallOption) (*RecordResponse, error) {
+func (c *databaseClient) GetAllRecords(ctx context.Context, in *GetAllRecordsRequest, opts ...grpc.CallOption) (*RecordsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RecordResponse)
+	out := new(RecordsResponse)
 	err := c.cc.Invoke(ctx, Database_GetAllRecords_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (c *databaseClient) GetAllRecords(ctx context.Context, in *GetAllRecordsReq
 // for forward compatibility.
 type DatabaseServer interface {
 	GetRecordByID(context.Context, *GetByIdRequest) (*RecordResponse, error)
-	GetAllRecords(context.Context, *GetAllRecordsRequest) (*RecordResponse, error)
+	GetAllRecords(context.Context, *GetAllRecordsRequest) (*RecordsResponse, error)
 	mustEmbedUnimplementedDatabaseServer()
 }
 
@@ -78,7 +78,7 @@ type UnimplementedDatabaseServer struct{}
 func (UnimplementedDatabaseServer) GetRecordByID(context.Context, *GetByIdRequest) (*RecordResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRecordByID not implemented")
 }
-func (UnimplementedDatabaseServer) GetAllRecords(context.Context, *GetAllRecordsRequest) (*RecordResponse, error) {
+func (UnimplementedDatabaseServer) GetAllRecords(context.Context, *GetAllRecordsRequest) (*RecordsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllRecords not implemented")
 }
 func (UnimplementedDatabaseServer) mustEmbedUnimplementedDatabaseServer() {}
