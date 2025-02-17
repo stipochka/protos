@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package database;
+
+option go_package = "service.database; database";
+
+service Database {
+
+    rpc GetRecordByID(GetByIdRequest) returns (RecordResponse);
+
+    rpc GetAllRecords(GetAllRecordsRequest) returns (RecordResponse);
+}
+
+message GetAllRecordsRequest {
+    string req = 1;
+}
+
+message GetByIdRequest {
+    int64 RecordID = 1;
+}
+
+message RecordResponse {
+    int64 id = 1;
+    string data = 2;
+}
+
+message RecordsResponse {
+    repeated RecordResponse Record = 1;
+}
