@@ -20,11 +20,28 @@ message GetByIdRequest {
 }
 
 message RecordResponse {
-    int64 id = 1;
-    string data = 2;
+  int32 id = 1;
+  string status = 2; // ON, OFF
+  int32 polling_period = 3;
+  int32 temperature = 4; // real value = Temperature / 100
+  string lamp_status = 5; // ON, OFF
+  int32 voltage = 6; // same reason as Temperature
+  Thresholds thresholds = 7;
+}
+
+message Thresholds {
+  repeated SensorData temperature = 1;
+  repeated SensorData humidity = 2;
+  repeated SensorData voltage = 3;
+}
+
+message SensorData {
+  int32 value = 1; // same reason as Temperature in Record struct
+  int32 polling_period = 2;
 }
 
 message RecordsResponse {
-    repeated RecordResponse Record = 1; //list of records of mcu from db
+    repeated RecordResponse Records = 1; //list of records of mcu from db
 }
+
 //protoc -I proto proto/db/*.proto --go_out=./gen/go/ --go_opt=paths=source_relative --go-grpc_out=./gen/go/ --go-grpc_opt=paths=source_relative
